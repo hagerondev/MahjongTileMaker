@@ -15,3 +15,5 @@ ex) 晴れ => 晴,rれ (文字色を指定したいときは文字の前に「�
 
 1. discord.py
 2. pillow
+
+![SAMPLE IMAGE](sample.png)
