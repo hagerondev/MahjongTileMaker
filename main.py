@@ -27,25 +27,30 @@ def create(content):
 	draw = ImageDraw.Draw(img)
 	textsize = draw.textsize("\n".join(list(text)), font=font)
 	pos = ((size[0]-textsize[0])//2,(size[1]*1.1-textsize[1])//2)
-	colors = {
+	acolors = {
 		"red": (231,30,48),
 		"black": (0,0,0),
+		"blue": (79, 145, 223),
 		"green": (0,134,53),
 	}
 	for data in content.split(","):
-		if len(data)==2 and data[0] in ["g","r"]:
+		if len(data)==2 and data[0] in ["g","r","b"]:
 			if data[0]=="g":
-				color = colors["green"]
+				color = acolors["green"]
 			elif data[0]=="r":
-				color = colors["red"]
+				color = acolors["red"]
+			elif data[0]=="b":
+				color = acolors["blue"]
 		else:
-			color = colors["black"]
+			color = acolors["black"]
 		c = data[-1]
 		draw = ImageDraw.Draw(img)
 		textsize = draw.textsize(c, font=font)
 		#print(pos)
 		cp = (pos[0], pos[1])
-		draw.text(cp, c, color, font=font)
+		print("color is",color)
+		draw.text(cp, c, fill=color, font=font)
+		#draw.text(cp, c, fill=(231,30,48), font=font)
 		pos = (pos[0], pos[1]+textsize[1])
 
 	file_path = "data/"+str(int(time.time()))+".png"
@@ -65,6 +70,9 @@ def req(content):
 
 client = discord.Client()
 
+
+#res,status = req("テ,rス,gト")
+
 @client.event
 async def on_ready():
 	print("ready")
@@ -73,7 +81,13 @@ async def on_ready():
 async def on_message(message):
 	if message.author!=client.user:
 		prefix = "!mj "
-		if message.content.startswith(prefix):
+		if message.content == prefix+"[]":
+			res,status = "base.png",200
+			if status!=200:
+				await message.channel.send(res)
+			else:
+				await message.channel.send(file=discord.File(res))
+		elif message.content.startswith(prefix):
 			content = message.content[len(prefix):]
 			res,status = req(content)
 			if status!=200:
