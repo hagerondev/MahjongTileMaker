@@ -1,4 +1,3 @@
 data/*
-!data
 discord_token.txt
-.gitigonore
+.gitignore
